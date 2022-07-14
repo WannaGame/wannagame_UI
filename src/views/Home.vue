@@ -9,18 +9,8 @@
 export default {
   name: 'Home',
   data: () => ({
-    query: {
-      client_id: process.env.VUE_APP_DISCORD_CLIENT_ID,
-      redirect_uri: process.env.VUE_APP_DISCORD_REDIRECT_URL,
-      response_type: 'code',
-      scope: 'identify',
-    },
-    url: 'https://discord.com/api/oauth2/authorize?',
+    url:'http://localhost:3333/api/auth/login',
   }),
-  mounted() {
-    this.url += Object.entries(this.query)
-        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-        .join('&');
-  }
+  mounted() {}
 }
 </script>

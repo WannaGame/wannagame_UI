@@ -31,17 +31,14 @@ export default class Discord extends Vue
   state: 'verifying' | 'loggedIn' | 'error' = 'verifying';
 
   async mounted() {
-    if ( !this.$route.query.code ) {
+    if ( !this.$route.query.isAuthenticated ) {
       this.$router.push('/');
       return;
     }
-
-    const url = `${ process.env.VUE_APP_API_URL }auth/discord?code=${ this.$route.query.code }`;
-
+    const url = `/api/auth/status`;
     try {
       const { data } = await axios.get(url);
-
-      this.name = data.name;
+      this.name = data.username;
       this.state = 'loggedIn';
     } catch ( e ) {
       this.error = e.response.data.message;
