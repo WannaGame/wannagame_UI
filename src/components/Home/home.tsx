@@ -9,7 +9,7 @@ const Home: React.FC = () => {
   return (
     <Grid container spacing={2} sx={{ textAlign: 'center', mt: '5em' }}>
       <Grid item xs={12}>
-        <Typography variant="h1">WannaPlay ?</Typography>
+        <Typography variant="h1">WannaGame ?</Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {t('home.subtitle')}
         </Typography>

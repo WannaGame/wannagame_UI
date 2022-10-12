@@ -1,5 +1,5 @@
 import React from 'react';
-import Discord from '../components/Discord/discord';
+import Profile from '../components/Profile/profile';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useAuth } from '../utils/hooks/useAuth';
 
@@ -13,7 +13,7 @@ export const PrivateRouter: React.FC = () => {
   if (Object.keys(user).length)
     return (
       <Routes>
-        <Route path="/auth/discord" element={<Discord />} />
+        <Route path="userProfile" element={<Profile />} />
       </Routes>
     );
   return <Navigate to={'/'} state={{ from: location }} replace />;

@@ -3,8 +3,6 @@ import { ReactElement } from 'react';
 import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
@@ -16,15 +14,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { ColorModeContext } from '../../App';
 import { useTranslation } from 'react-i18next';
 import { ReactComponent as FrenchFlagIcon } from '../../assets/icons/fr.svg';
 import { ReactComponent as UKFlagIcon } from '../../assets/icons/gb.svg';
-import { SvgIcon } from '@mui/material';
+import { Avatar, SvgIcon } from '@mui/material';
+import { useRecoilValue } from 'recoil';
+import { User } from '../../utils/types';
+import { userState } from '../../recoilStore';
 
 const drawerWidth = 240;
 
@@ -58,28 +59,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -106,6 +85,7 @@ const AppDrawer: React.FC<Props> = ({ inBoxContent }) => {
   const colorMode = React.useContext(ColorModeContext);
   const { t, i18n } = useTranslation();
   const [open, setOpen] = React.useState(false);
+  const user = useRecoilValue<User>(userState);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -123,56 +103,114 @@ const AppDrawer: React.FC<Props> = ({ inBoxContent }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer
+        variant="permanent"
+        open={open}
+        PaperProps={{
+          sx: {
+            backgroundColor: theme.palette.primary.dark,
+            color:
+              theme.palette.mode === 'dark'
+                ? theme.palette.grey[800]
+                : theme.palette.grey[100],
+          },
+        }}
+      >
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
+          {open ? (
+            <IconButton
+              onClick={handleDrawerClose}
+              sx={{
+                color:
+                  theme.palette.mode === 'dark'
+                    ? theme.palette.grey[800]
+                    : theme.palette.grey[100],
+              }}
+            >
+              {theme.direction === 'rtl' ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          ) : (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                minWidth: 0,
+                margin: 'auto',
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
         </DrawerHeader>
         <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
+        <List sx={{ flexGrow: 1 }}>
+          <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color:
+                    theme.palette.mode === 'dark'
+                      ? theme.palette.grey[800]
+                      : theme.palette.grey[100],
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                {user.avatar ? (
+                  <Avatar
+                    alt="User Avatar"
+                    src={`https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.png`}
+                  />
+                ) : (
+                  <AccountCircleIcon />
+                )}
+              </ListItemIcon>
+              <ListItemText
+                primary={t('drawer.profile')}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color:
+                    theme.palette.mode === 'dark'
+                      ? theme.palette.grey[800]
+                      : theme.palette.grey[100],
+                }}
+              >
+                <DynamicFeedIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={t('drawer.feed')}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
         <Divider />
         <List>
@@ -182,6 +220,10 @@ const AppDrawer: React.FC<Props> = ({ inBoxContent }) => {
                 minHeight: 48,
                 justifyContent: open ? 'initial' : 'center',
                 px: 2.5,
+                color:
+                  theme.palette.mode === 'dark'
+                    ? theme.palette.grey[800]
+                    : theme.palette.grey[100],
               }}
               onClick={colorMode.toggleColorMode}
               color="inherit"
@@ -191,6 +233,10 @@ const AppDrawer: React.FC<Props> = ({ inBoxContent }) => {
                   minWidth: 0,
                   mr: open ? 3 : 'auto',
                   justifyContent: 'center',
+                  color:
+                    theme.palette.mode === 'dark'
+                      ? theme.palette.grey[800]
+                      : theme.palette.grey[100],
                 }}
               >
                 {theme.palette.mode === 'dark' ? (
