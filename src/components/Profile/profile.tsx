@@ -3,24 +3,23 @@ import { userState } from '../../recoilStore';
 import { useRecoilValue } from 'recoil';
 import { User } from '../../utils/types';
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Autocomplete,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   CardMedia,
+  Collapse,
   Grid,
   IconButton,
+  IconButtonProps,
   TextField,
   Typography,
-  useTheme,
 } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import SettingsIcon from '@mui/icons-material/Settings';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import { styled } from '@mui/material/styles';
 
 const top100Films = [
   { title: 'The Shawshank Redemption', year: 1994 },
@@ -140,7 +139,7 @@ const top100Films = [
   { title: 'Dangal', year: 2016 },
   { title: 'The Sting', year: 1973 },
   { title: '2001: A Space Odyssey', year: 1968 },
-  { title: "Singin' in the Rain", year: 1952 },
+  { title: "'Singin\' in the Rain' year: 1952 },
   { title: 'Toy Story', year: 1995 },
   { title: 'Bicycle Thieves', year: 1948 },
   { title: 'The Kid', year: 1921 },
@@ -150,88 +149,156 @@ const top100Films = [
   { title: 'Monty Python and the Holy Grail', year: 1975 },
 ];
 
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
 const Profile: React.FC = () => {
   const user = useRecoilValue<User>(userState);
-  const theme = useTheme();
+  const [gameListExpanded, setGameListExpanded] = React.useState(false);
+  const [userSettingsExpanded, setUserSettingsExpanded] = React.useState(false);
+  const [dailyStatusExpanded, setDailyStatusExpanded] = React.useState(true);
+
+  const handleGameListExpandClick = () => {
+    setGameListExpanded(!gameListExpanded);
+  };
+
+  const handleUserSettingsExpandClick = () => {
+    setUserSettingsExpanded(!userSettingsExpanded);
+  };
+
+  const handleDailyStatusExpandClick = () => {
+    setDailyStatusExpanded(!dailyStatusExpanded);
+  };
+
   return (
     <Grid
       container
       spacing={4}
       sx={{ mt: '5em' }}
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-    >
+      direction="'olumn"'      justifyContent="'enter"'      alignItems="'enter"'    >
       <Grid item xs={6}>
-        <Card
-          raised
-          sx={{
-            bgcolor: theme.palette.primary.dark,
-            color:
-              theme.palette.mode === 'dark'
-                ? theme.palette.grey[800]
-                : theme.palette.grey[100],
-          }}
-        >
+        <Card raised sx={{}}>
           <CardHeader
             title={`Welcome on your WannaGame profile, ${user.username}`}
           />
           {user.banner && (
             <CardMedia
-              component="img"
-              height="194"
+              component='img'
+              height='194'
               image={`https://cdn.discordapp.com/banners/${user.discordId}/${user.avatar}.png`}
-              alt="User Banner"
+              alt='User Banner'
             />
           )}
           <CardContent>
-            <Typography variant="body1">
+            <Typography variant='body1'>
               From here, you can manage your profile settings, add some games to
               your current gaming list and update your status for today !
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <FavoriteIcon />
-            </IconButton>
-            <IconButton aria-label="share">
-              <ShareIcon />
-            </IconButton>
+            <ExpandMore
+              expand={gameListExpanded}
+              onClick={handleGameListExpandClick}
+              aria-expanded={gameListExpanded}
+              aria-label='manage your games'
+            >
+              <SportsEsportsIcon />
+            </ExpandMore>
+            <ExpandMore
+              expand={userSettingsExpanded}
+              onClick={handleUserSettingsExpandClick}
+              aria-expanded={userSettingsExpanded}
+              aria-label='manage your games'
+            >
+              <SettingsIcon />
+            </ExpandMore>
+            <ExpandMore
+              expand={dailyStatusExpanded}
+              onClick={handleDailyStatusExpandClick}
+              aria-expanded={dailyStatusExpanded}
+              aria-label='manage your games'
+            >
+              <EventAvailableIcon />
+            </ExpandMore>
           </CardActions>
+          <Collapse in={gameListExpanded} timeout='auto' unmountOnExit>
+            <CardContent>
+              <Typography paragraph>
+                Here you can manage your game list
+              </Typography>
+              <Autocomplete
+                multiple
+                id='tags-outlined'
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                defaultValue={[top100Films[13]]}
+                filterSelectedOptions
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label='filterSelectedOptions'
+                    placeholder='Favorites'
+                  />
+                )}
+              />
+            </CardContent>
+          </Collapse>
+          <Collapse in={userSettingsExpanded} timeout='auto' unmountOnExit>
+            <CardContent>
+              <Typography paragraph>
+                Here you can manage your game list
+              </Typography>
+              <Autocomplete
+                multiple
+                id='tags-outlined'
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                defaultValue={[top100Films[13]]}
+                filterSelectedOptions
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label='filterSelectedOptions'
+                    placeholder='Favorites'
+                  />
+                )}
+              />
+            </CardContent>
+          </Collapse>
+          <Collapse in={dailyStatusExpanded} timeout='auto' unmountOnExit>
+            <CardContent>
+              <Typography paragraph>
+                Here you can manage your game list
+              </Typography>
+              <Autocomplete
+                multiple
+                id='tags-outlined'
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                defaultValue={[top100Films[13]]}
+                filterSelectedOptions
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label='filterSelectedOptions'
+                    placeholder='Favorites'
+                  />
+                )}
+              />
+            </CardContent>
+          </Collapse>
         </Card>
-      </Grid>
-      <Grid item xs={12}>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>
-              My games
-            </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>
-              Here fill in the games you are playing these days
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Autocomplete
-              multiple
-              id="tags-outlined"
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              defaultValue={[top100Films[13]]}
-              filterSelectedOptions
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="filterSelectedOptions"
-                  placeholder="Favorites"
-                />
-              )}
-            />
-          </AccordionDetails>
-        </Accordion>
       </Grid>
     </Grid>
   );
