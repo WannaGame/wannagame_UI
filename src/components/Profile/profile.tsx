@@ -139,7 +139,7 @@ const top100Films = [
   { title: 'Dangal', year: 2016 },
   { title: 'The Sting', year: 1973 },
   { title: '2001: A Space Odyssey', year: 1968 },
-  { title: "'Singin\' in the Rain' year: 1952 },
+  { title: 'Singin in the Rain', year: 1952 },
   { title: 'Toy Story', year: 1995 },
   { title: 'Bicycle Thieves', year: 1948 },
   { title: 'The Kid', year: 1921 },
@@ -186,7 +186,10 @@ const Profile: React.FC = () => {
       container
       spacing={4}
       sx={{ mt: '5em' }}
-      direction="'olumn"'      justifyContent="'enter"'      alignItems="'enter"'    >
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+    >
       <Grid item xs={6}>
         <Card raised sx={{}}>
           <CardHeader
@@ -194,14 +197,14 @@ const Profile: React.FC = () => {
           />
           {user.banner && (
             <CardMedia
-              component='img'
-              height='194'
+              component="img"
+              height="194"
               image={`https://cdn.discordapp.com/banners/${user.discordId}/${user.avatar}.png`}
-              alt='User Banner'
+              alt="User Banner"
             />
           )}
           <CardContent>
-            <Typography variant='body1'>
+            <Typography variant="body1">
               From here, you can manage your profile settings, add some games to
               your current gaming list and update your status for today !
             </Typography>
@@ -211,7 +214,7 @@ const Profile: React.FC = () => {
               expand={gameListExpanded}
               onClick={handleGameListExpandClick}
               aria-expanded={gameListExpanded}
-              aria-label='manage your games'
+              aria-label="manage your games"
             >
               <SportsEsportsIcon />
             </ExpandMore>
@@ -219,7 +222,7 @@ const Profile: React.FC = () => {
               expand={userSettingsExpanded}
               onClick={handleUserSettingsExpandClick}
               aria-expanded={userSettingsExpanded}
-              aria-label='manage your games'
+              aria-label="manage your games"
             >
               <SettingsIcon />
             </ExpandMore>
@@ -227,19 +230,19 @@ const Profile: React.FC = () => {
               expand={dailyStatusExpanded}
               onClick={handleDailyStatusExpandClick}
               aria-expanded={dailyStatusExpanded}
-              aria-label='manage your games'
+              aria-label="manage your games"
             >
               <EventAvailableIcon />
             </ExpandMore>
           </CardActions>
-          <Collapse in={gameListExpanded} timeout='auto' unmountOnExit>
+          <Collapse in={gameListExpanded} timeout="auto" unmountOnExit>
             <CardContent>
               <Typography paragraph>
                 Here you can manage your game list
               </Typography>
               <Autocomplete
                 multiple
-                id='tags-outlined'
+                id="tags-outlined"
                 options={top100Films}
                 getOptionLabel={(option) => option.title}
                 defaultValue={[top100Films[13]]}
@@ -247,21 +250,21 @@ const Profile: React.FC = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label='filterSelectedOptions'
-                    placeholder='Favorites'
+                    label="filterSelectedOptions"
+                    placeholder="Favorites"
                   />
                 )}
               />
             </CardContent>
           </Collapse>
-          <Collapse in={userSettingsExpanded} timeout='auto' unmountOnExit>
+          <Collapse in={userSettingsExpanded} timeout="auto" unmountOnExit>
             <CardContent>
               <Typography paragraph>
                 Here you can manage your game list
               </Typography>
               <Autocomplete
                 multiple
-                id='tags-outlined'
+                id="tags-outlined"
                 options={top100Films}
                 getOptionLabel={(option) => option.title}
                 defaultValue={[top100Films[13]]}
@@ -269,21 +272,21 @@ const Profile: React.FC = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label='filterSelectedOptions'
-                    placeholder='Favorites'
+                    label="filterSelectedOptions"
+                    placeholder="Favorites"
                   />
                 )}
               />
             </CardContent>
           </Collapse>
-          <Collapse in={dailyStatusExpanded} timeout='auto' unmountOnExit>
+          <Collapse in={dailyStatusExpanded} timeout="auto" unmountOnExit>
             <CardContent>
               <Typography paragraph>
                 Here you can manage your game list
               </Typography>
               <Autocomplete
                 multiple
-                id='tags-outlined'
+                id="tags-outlined"
                 options={top100Films}
                 getOptionLabel={(option) => option.title}
                 defaultValue={[top100Films[13]]}
@@ -291,8 +294,8 @@ const Profile: React.FC = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label='filterSelectedOptions'
-                    placeholder='Favorites'
+                    label="filterSelectedOptions"
+                    placeholder="Favorites"
                   />
                 )}
               />
